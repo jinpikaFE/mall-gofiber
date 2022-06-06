@@ -1,6 +1,7 @@
 package controller
 
 import (
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/jinpikaFE/go_fiber/models"
 	"github.com/jinpikaFE/go_fiber/pkg/app"
@@ -27,7 +28,20 @@ func Login(c *fiber.Ctx) error {
 		return appF.Response(fiber.StatusBadRequest, fiber.StatusBadRequest, "检验参数错误", errors)
 	}
 
-	res := models.GetToken(login)
+	userSt := &models.User{}
+	userSt.Username = login.Username
+
+	res, errs := models.GetUser(userSt)
+
+	if errs != nil {
+		return appF.Response(fiber.StatusInternalServerError, fiber.StatusInternalServerError, "查询失败", errs)
+	}
+
+	if !(res.ID > 0) {
+		return appF.Response(fiber.StatusBadRequest, fiber.StatusBadRequest, "用户不存在", nil)
+	}
+
+	loginres := models.GetToken(login, res)
 
 	redisErr := gredis.Set("token", res, 300)
 
@@ -36,9 +50,9 @@ func Login(c *fiber.Ctx) error {
 		return appF.Response(fiber.StatusInternalServerError, fiber.StatusInternalServerError, "redis错误", redisErr)
 	}
 
-	if res == "" {
+	if loginres == "" {
 		return appF.Response(fiber.StatusUnauthorized, fiber.StatusUnauthorized, "账户或者密码错误", nil)
 	}
 
-	return appF.Response(fiber.StatusOK, fiber.StatusOK, "SUCCESS", res)
+	return appF.Response(fiber.StatusOK, fiber.StatusOK, "SUCCESS", loginres)
 }

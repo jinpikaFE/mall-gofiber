@@ -5,6 +5,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/jinpikaFE/go_fiber/pkg/logging"
+	"github.com/jinpikaFE/go_fiber/pkg/untils"
 )
 
 type Login struct {
@@ -12,8 +13,8 @@ type Login struct {
 	Password string `validate:"required" query:"password" json:"password" xml:"password" form:"password"`
 }
 
-func GetToken(login *Login) string {
-	if login.Username != "admin" || login.Password != "admin" {
+func GetToken(login *Login, user *User) string {
+	if login.Username != user.Username || untils.GetSha256(login.Password) != user.Password {
 		return ""
 	}
 

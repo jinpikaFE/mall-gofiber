@@ -71,6 +71,11 @@ func InitRouter() *fiber.App {
 	}
 
 	{
+		apiv1.Get("/user", controller.GetUser)
+		apiv1.Post("/user", controller.AddUser)
+	}
+
+	{
 		apiv1.Post("/upload", controller.Upload)
 	}
 
