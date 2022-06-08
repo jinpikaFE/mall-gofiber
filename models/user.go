@@ -2,7 +2,6 @@ package models
 
 import (
 	// "time"
-
 	"github.com/jinzhu/gorm"
 )
 
@@ -10,15 +9,17 @@ type User struct {
 	Model
 
 	// query tag是query参数别名，json xml，form适合post
-	Username  string `validate:"" gorm:"unique" validate:"unique" query:"username" json:"username" xml:"username" form:"username"`
-	Password  string `validate:"" query:"password" json:"password" xml:"password" form:"password"`
-	Mobile    string `validate:"" gorm:"unique" validate:"unique" query:"mobile" json:"mobile" xml:"mobile" form:"mobile"`
-	AvatarUrl string `validate:"" query:"avatarUrl" json:"avatarUrl" xml:"avatarUrl" form:"avatarUrl"`
-	NickName  string `validate:"" query:"nickName" json:"nickName" xml:"nickName" form:"nickName"`
-	Gender    int    `validate:"" query:"gender" json:"gender" xml:"gender" form:"gender"`
-	Province  string `validate:"" query:"province" json:"province" xml:"province" form:"province"`
-	City      string `validate:"" query:"city" json:"city" xml:"city" form:"city"`
-	Country   string `validate:"" query:"country" json:"country" xml:"country" form:"country"`
+	Username  *string `validate:"" gorm:"unique;comment:'用户名'" query:"username" json:"username" xml:"username" form:"username"`
+	Password  string  `validate:"" gorm:"comment:'密码'" query:"password" json:"password" xml:"password" form:"password"`
+	Mobile    *string `validate:"" gorm:"unique;comment:'手机号'" query:"mobile" json:"mobile" xml:"mobile" form:"mobile"`
+	AvatarUrl *string `validate:"" gorm:"comment:'头像'" query:"avatarUrl" json:"avatarUrl" xml:"avatarUrl" form:"avatarUrl"`
+	NickName  *string `validate:"" gorm:"comment:'昵称'" query:"nickName" json:"nickName" xml:"nickName" form:"nickName"`
+	Gender    *string `validate:"" sql:"type:enum('0', '1', '2')" gorm:"comment:'性别,0未知 1男 2女';default:'0'" query:"gender" json:"gender" xml:"gender" form:"gender"`
+	Province  *string `validate:"" gorm:"comment:'省'" query:"province" json:"province" xml:"province" form:"province"`
+	City      *string `validate:"" gorm:"comment:'市'" query:"city" json:"city" xml:"city" form:"city"`
+	Country   *string `validate:"" gorm:"comment:'区'" query:"country" json:"country" xml:"country" form:"country"`
+	Unionid   *string `validate:"" gorm:"comment:'小程序unionid'" query:"unionid" json:"unionid" xml:"unionid" form:"unionid"`
+	Openid    *string `validate:"" gorm:"comment:'小程序openid'" query:"openid" json:"openid" xml:"openid" form:"openid"`
 }
 
 // GetArticleTotal gets the total number of articles based on the constraints
@@ -49,7 +50,7 @@ func GetUser(maps interface{}) (*User, error) {
 	return &user, nil
 }
 
-func AddUser(user *User) error {
+func AddUser(user User) error {
 	if err := db.Create(&user).Error; err != nil {
 		return err
 	}

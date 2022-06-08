@@ -42,7 +42,6 @@ func AddUser(c *fiber.Ctx) error {
 	user := &models.User{}
 
 	if err := c.BodyParser(user); err != nil {
-		logging.Error(err)
 		return appF.Response(fiber.StatusInternalServerError, fiber.StatusInternalServerError, "参数解析错误", err)
 	}
 
@@ -55,11 +54,11 @@ func AddUser(c *fiber.Ctx) error {
 
 	user.Password = untils.GetSha256(user.Password)
 
-	err := models.AddUser(user)
+	err := models.AddUser(*user)
 
 	if err != nil {
-		appF.Response(fiber.StatusInternalServerError, fiber.StatusInternalServerError, "添加失败", err)
+		return appF.Response(fiber.StatusInternalServerError, fiber.StatusInternalServerError, "添加失败", err)
 	}
 
-	return appF.Response(fiber.StatusOK, fiber.StatusOK, "SUCCESS", nil)
+	return appF.Response(fiber.StatusOK, fiber.StatusOK, "SUCCESS", user)
 }

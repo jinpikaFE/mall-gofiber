@@ -11,10 +11,11 @@ import (
 type Login struct {
 	Username string `validate:"required" query:"username" json:"username" xml:"username" form:"username"`
 	Password string `validate:"required" query:"password" json:"password" xml:"password" form:"password"`
+	Type     int    `validate:"required" query:"type" json:"type" xml:"type" form:"type"`
 }
 
 func GetToken(login *Login, user *User) string {
-	if login.Username != user.Username || untils.GetSha256(login.Password) != user.Password {
+	if &login.Username != user.Username || untils.GetSha256(login.Password) != user.Password {
 		return ""
 	}
 

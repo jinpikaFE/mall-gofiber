@@ -1,7 +1,6 @@
 package controller
 
 import (
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/jinpikaFE/go_fiber/models"
 	"github.com/jinpikaFE/go_fiber/pkg/app"
@@ -29,7 +28,7 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	userSt := &models.User{}
-	userSt.Username = login.Username
+	userSt.Username = &login.Username
 
 	res, errs := models.GetUser(userSt)
 
