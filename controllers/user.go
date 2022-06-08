@@ -18,7 +18,7 @@ func GetUser(c *fiber.Ctx) error {
 	appF := app.Fiber{C: c}
 	maps := &models.User{}
 
-	if err := c.BodyParser(maps); err != nil {
+	if err := c.QueryParser(maps); err != nil {
 		logging.Error(err)
 		return appF.Response(fiber.StatusInternalServerError, fiber.StatusInternalServerError, "参数解析错误", err)
 	}

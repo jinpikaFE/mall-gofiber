@@ -1,7 +1,7 @@
 package models
 
 import (
-	"time"
+	// "time"
 
 	"github.com/jinzhu/gorm"
 )
@@ -10,12 +10,15 @@ type User struct {
 	Model
 
 	// query tag是query参数别名，json xml，form适合post
-	Username string `validate:"" gorm:"unique" validate:"unique" query:"username" json:"username" xml:"username" form:"username"`
-	Password string `validate:"" query:"password" json:"password" xml:"password" form:"password"`
-	Mobile   string `validate:"" gorm:"unique" validate:"unique" query:"mobile" json:"mobile" xml:"mobile" form:"mobile"`
-	Avatar   string `validate:"" query:"avatar" json:"avatar" xml:"avatar" form:"avatar"`
-	Nickname string `validate:"" query:"nickname" json:"nickname" xml:"nickname" form:"nickname"`
-	Gender   string `validate:"" query:"gender" json:"gender" xml:"gender" form:"gender"`
+	Username  string `validate:"" gorm:"unique" validate:"unique" query:"username" json:"username" xml:"username" form:"username"`
+	Password  string `validate:"" query:"password" json:"password" xml:"password" form:"password"`
+	Mobile    string `validate:"" gorm:"unique" validate:"unique" query:"mobile" json:"mobile" xml:"mobile" form:"mobile"`
+	AvatarUrl string `validate:"" query:"avatarUrl" json:"avatarUrl" xml:"avatarUrl" form:"avatarUrl"`
+	NickName  string `validate:"" query:"nickName" json:"nickName" xml:"nickName" form:"nickName"`
+	Gender    int    `validate:"" query:"gender" json:"gender" xml:"gender" form:"gender"`
+	Province  string `validate:"" query:"province" json:"province" xml:"province" form:"province"`
+	City      string `validate:"" query:"city" json:"city" xml:"city" form:"city"`
+	Country   string `validate:"" query:"country" json:"country" xml:"country" form:"country"`
 }
 
 // GetArticleTotal gets the total number of articles based on the constraints
@@ -78,21 +81,21 @@ func ExistUserByID(id int) bool {
 	return user.ID > 0
 }
 
-// gorm所支持的回调方法：
+// // gorm所支持的回调方法：
 
-// 创建：BeforeSave、BeforeCreate、AfterCreate、AfterSave
-// 更新：BeforeSave、BeforeUpdate、AfterUpdate、AfterSave
-// 删除：BeforeDelete、AfterDelete
-// 查询：AfterFind
+// // 创建：BeforeSave、BeforeCreate、AfterCreate、AfterSave
+// // 更新：BeforeSave、BeforeUpdate、AfterUpdate、AfterSave
+// // 删除：BeforeDelete、AfterDelete
+// // 查询：AfterFind
 
-func (user *User) beforeCreate(scope *gorm.Scope) error {
-	scope.SetColumn("CreatedOn", time.Now().Unix())
+// func (user *User) BeforeCreate(scope *gorm.Scope) error {
+// 	scope.SetColumn("CreatedOn", time.Now().Unix())
 
-	return nil
-}
+// 	return nil
+// }
 
-func (user *User) beforeUpdate(scope *gorm.Scope) error {
-	scope.SetColumn("ModifiedOn", time.Now().Unix())
+// func (user *User) BeforeUpdate(scope *gorm.Scope) error {
+// 	scope.SetColumn("ModifiedOn", time.Now().Unix())
 
-	return nil
-}
+// 	return nil
+// }
